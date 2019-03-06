@@ -1,0 +1,44 @@
+!
+! Auto-Lock Configuration
+configuration mode exclusive auto
+!
+! Disable reverse-lookup
+no ip domain-lookup
+!
+! Disable HTTP and HTTPS
+no ip http server
+no ip http secure-server
+!
+! Logging
+service timestamps log datetime msec show-timezone
+no logging console
+no logging monitor
+!
+! SSH
+ip ssh time-out 60
+ip ssh authentication-retries 3
+ip ssh version 2
+ip scp server enable
+ip ssh time-out 120
+! 
+! Line
+line con 0
+  exec-timeout 10 0
+line vty 0 4
+  exec-timeout 10 0
+  transport input ssh
+  no domain-lookup
+!
+! Auto-save configuration archive
+!  Record changes in running-config
+archive
+  path bootflash:archived-config
+  maximum 14
+  time-period 1440
+  write-memory
+  archive
+  log config
+    logging enable
+    logging size 200
+    hidekeys
+    notify syslog
